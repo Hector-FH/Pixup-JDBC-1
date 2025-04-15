@@ -8,4 +8,11 @@ public interface DiscoJdbc
 {
 
     List<Disco> findAll();
+    boolean save(Disco disco);
+    boolean update(Disco disco);
+    boolean delete(Disco disco);
+    Disco findById(Integer id);
+
+
+
 }

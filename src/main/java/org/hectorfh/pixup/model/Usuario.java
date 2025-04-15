@@ -11,6 +11,22 @@ public class Usuario extends Catalogo
     public Usuario() {
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+    public String getPrimerApellido() {
+        return primerApellido;
+    }
+    public String getSegundoApellido() {
+        return segundoApellido;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public String getEmail() {
+        return email;
+    }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }

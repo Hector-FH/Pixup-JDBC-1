@@ -8,6 +8,16 @@ public class Colonia extends Catalogo
 
     public Colonia() {}
 
+    public String getNombre() {
+        return nombre;
+    }
+    public String getCp() {
+        return cp;
+    }
+    public Integer getMunicipio_id() {
+        return municipio_id;
+    }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }

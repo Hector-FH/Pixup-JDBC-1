@@ -4,6 +4,7 @@ import org.hectorfh.pixup.model.Artista;
 import org.hectorfh.pixup.repository.jdbc.Conexion;
 import org.hectorfh.pixup.repository.jdbc.ArtistaJdbc;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,7 +32,7 @@ public class ArtistaJdbcImpl extends Conexion<Artista> implements ArtistaJdbc {
         String query = "SELECT * FROM TBL_ARTISTA";
 
         try {
-            if (openConnection()) {
+            if (!openConnection()) {
                 System.out.println("Error en conexión");
                 return null;
             }
@@ -54,10 +55,123 @@ public class ArtistaJdbcImpl extends Conexion<Artista> implements ArtistaJdbc {
         return null;
     }
 
+    @Override
+    public boolean save(Artista artista) {
+        PreparedStatement preparedStatement = null;
+        String query = "INSERT INTO TBL_ARTISTA (NOMBRE) VALUES (?)";
+        int res = 0;
+
+        try {
+            if (!openConnection()) {
+                System.out.println("Error en conexión");
+                return false;
+            }
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, artista.getNombre());
+            res = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            closeConnection();
+            return res == 1;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean update(Artista artista) {
+        PreparedStatement preparedStatement = null;
+        String query = "UPDATE TBL_ARTISTA SET NOMBRE = ? WHERE ID = ?";
+        int res = 0;
+
+        try {
+            if (!openConnection()) {
+                System.out.println("Error en conexión");
+                return false;
+            }
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, artista.getNombre());
+            preparedStatement.setInt(2, artista.getId());
+            res = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            closeConnection();
+            return res == 1;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delete(Artista artista) {
+        PreparedStatement preparedStatement = null;
+        String query = "DELETE FROM TBL_ARTISTA WHERE ID = ?";
+        int res = 0;
+
+        try {
+            if (!openConnection()) {
+                System.out.println("Error en conexión");
+                return false;
+            }
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, artista.getId());
+            res = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            closeConnection();
+            return res == 1;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public Artista findById(Integer id) {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Artista artista = null;
+        String query = "SELECT * FROM TBL_ARTISTA WHERE ID = ?";
+
+        try {
+            if (!openConnection()) {
+                System.out.println("Error en conexión");
+                return null;
+            }
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                artista = new Artista();
+                artista.setId(resultSet.getInt(1));
+                artista.setNombre(resultSet.getString(2));
+                }
+            resultSet.close();
+            preparedStatement.close();
+            closeConnection();
+            return artista;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+/*
     public static void main(String[] a) {
         ArtistaJdbcImpl
                 .getInstance()
                 .findAll()
                 .forEach(System.out::println);
     }
+
+ */
 }

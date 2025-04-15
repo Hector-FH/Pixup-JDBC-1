@@ -7,6 +7,10 @@ public class Disquera extends Catalogo
     public Disquera() {
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }

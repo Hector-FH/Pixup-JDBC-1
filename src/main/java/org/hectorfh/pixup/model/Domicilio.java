@@ -12,6 +12,25 @@ public class Domicilio extends Catalogo
 
     public Domicilio() {}
 
+    public String getCalle() {
+        return calle;
+    }
+    public String getNumExterior() {
+        return numExterior;
+    }
+    public String getNumInterior() {
+        return numInterior;
+    }
+    public Integer getColonia_id() {
+        return colonia_id;
+    }
+    public Integer getTipoDomicilio_id() {
+        return tipoDomicilio_id;
+    }
+    public Integer getUsuario_id() {
+        return usuario_id;
+    }
+
     public void setCalle(String calle) {
         this.calle = calle;
     }

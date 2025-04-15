@@ -2,19 +2,23 @@ package org.hectorfh.pixup.model;
 
 public class GeneroMusical extends Catalogo
 {
-    private String nombre;
+    private String descripcion;
 
     public GeneroMusical() {
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
     }
 
     @Override
     public String toString() {
         return "GeneroMusical{" +
-                "nombre='" + nombre + '\'' +
+                "descripcion='" + descripcion + '\'' +
                 ", id=" + id +
                 '}';
     }

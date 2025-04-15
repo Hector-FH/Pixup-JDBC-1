@@ -4,7 +4,10 @@ public class Artista extends Catalogo
 {
     private String nombre;
 
-    public Artista() {
+    public Artista() {}
+
+    public String getNombre() {
+        return nombre;
     }
 
     public void setNombre(String nombre) {

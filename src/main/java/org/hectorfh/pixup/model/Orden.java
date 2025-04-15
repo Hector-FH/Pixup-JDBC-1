@@ -5,25 +5,44 @@ import java.sql.Date;
 public class Orden extends Catalogo
 {
     private Float costoTotal;
-    private Date fecha;
+    private String fecha;
     private Integer cantidadTotal;
-    private Boolean estatusEnvio;
+    private String estatusEnvio;
     private Float costoEnvio;
     private Integer usuario_id;
 
     public Orden() {
     }
 
+    public Float getCostoTotal() {
+        return costoTotal;
+    }
+    public String getFecha() {
+        return fecha;
+    }
+    public Integer getCantidadTotal() {
+        return cantidadTotal;
+    }
+    public String getEstatusEnvio() {
+        return estatusEnvio;
+    }
+    public Float getCostoEnvio() {
+        return costoEnvio;
+    }
+    public Integer getUsuario_id() {
+        return usuario_id;
+    }
+
     public void setCostoTotal(Float costoTotal) {
         this.costoTotal = costoTotal;
     }
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
     public void setCantidadTotal(Integer cantidadTotal) {
         this.cantidadTotal = cantidadTotal;
     }
-    public void setEstatusEnvio(Boolean estatusEnvio) {
+    public void setEstatusEnvio(String estatusEnvio) {
         this.estatusEnvio = estatusEnvio;
     }
     public void setCostoEnvio(Float costoEnvio) {
