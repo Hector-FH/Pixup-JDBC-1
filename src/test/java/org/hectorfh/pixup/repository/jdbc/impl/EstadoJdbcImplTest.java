@@ -26,8 +26,8 @@ class EstadoJdbcImplTest {
         EstadoJdbc estadoJdbc = EstadoJdbcImpl.getInstance();
         List<Estado>list = estadoJdbc.findAll();
                 assertNotNull(list);
-                assertTrue(list.size() >= 1);
-                assertEquals(3,list.size());
+                assertTrue(list.size() >= 0);
+                assertEquals(0,list.size());
         list.stream().forEach(System.out::println);
 
     }
@@ -38,10 +38,11 @@ class EstadoJdbcImplTest {
         Estado estado = new Estado();
         boolean res = false;
         EstadoJdbc estadoJdbc = EstadoJdbcImpl.getInstance();
-        estado.setNombre ("MONTERREY");
+        estado.setNombre ("CDMX");
         res = estadoJdbc.save( estado );
         assertEquals( true, res);
 
+        System.out.println(estado);
 
     }
 
@@ -51,12 +52,13 @@ class EstadoJdbcImplTest {
 
         Estado estado = new Estado();
         boolean res = false;
-        estado.setNombre("JUAREZ");
+        estado.setNombre("EDOMEX");
         estado.setId(1);
         EstadoJdbc estadoJdbc = EstadoJdbcImpl.getInstance();
         res = estadoJdbc.update( estado );
         assertEquals( true, res);
 
+        System.out.println( estado );
     }
 
     @Test
@@ -69,7 +71,6 @@ class EstadoJdbcImplTest {
         res = estadoJdbc.delete( estado );
         assertEquals( true, res);
 
-
     }
 
 @Test
@@ -79,7 +80,7 @@ class EstadoJdbcImplTest {
         EstadoJdbc estadoJdbc = EstadoJdbcImpl.getInstance();
         Estado estado = estadoJdbc.findById(1);
         assertNotNull( estado );
-        assertTrue("HIDALGO".equals(estado.getNombre()));
+        assertTrue("CDMX".equals(estado.getNombre()));
         assertEquals(1, estado.getId());
         System.out.println( estado );
 

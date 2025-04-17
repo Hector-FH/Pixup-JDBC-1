@@ -1,8 +1,8 @@
 package org.hectorfh.pixup.repository.jdbc.impl;
 
-import org.hectorfh.pixup.model.Estado;
+import org.hectorfh.pixup.model.Notificacion;
 import org.hectorfh.pixup.repository.jdbc.Conexion;
-import org.hectorfh.pixup.repository.jdbc.EstadoJdbc;
+import org.hectorfh.pixup.repository.jdbc.NotificacionJdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,30 +11,30 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
+public class NotificacionJdbcImpl extends Conexion<Notificacion> implements NotificacionJdbc {
 
-    private static EstadoJdbc estadoJdbc;
+    private static NotificacionJdbc notificacionJdbc;
 
-    private EstadoJdbcImpl() {
-    }
+    public NotificacionJdbcImpl() {}
 
-    public static EstadoJdbc getInstance( )
+    public static NotificacionJdbc getInstance( )
     {
-        if( estadoJdbc == null )
+        if (notificacionJdbc == null)
         {
-            estadoJdbc = new EstadoJdbcImpl( );
+            notificacionJdbc = new NotificacionJdbcImpl();
         }
-        return estadoJdbc;
+        return notificacionJdbc;
     }
 
     @Override
-    public List<Estado> findAll()
-    {
+    public List<Notificacion> findAll() {
+
         Statement statement = null;
         ResultSet resultSet = null;
-        List<Estado>estados = null;
-        Estado estado = null;
-        String query = "SELECT * FROM TBL_ESTADO";
+        List<Notificacion> notificacions = null;
+        Notificacion notificacion = null;
+        String query = "SELECT * FROM TBL_NOTIFICACION";
+
 
         try
         {
@@ -43,63 +43,37 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
                 System.out.println("Error en conexión");
                 return null;
             }
+
             statement = connection.createStatement( );
             resultSet = statement.executeQuery( query );
-            estados = new ArrayList<>( );
+            notificacions = new ArrayList<>( );
             while( resultSet.next() )
             {
-                estado = new Estado();
-                estado.setId( resultSet.getInt( 1 ) );
-                estado.setNombre( resultSet.getString( 2 ) );
-                estados.add( estado );
+                notificacion = new Notificacion();
+                notificacion.setId( resultSet.getInt( 1 ) );
+                notificacion.setFecha( resultSet.getString( 2 ) );
+                notificacion.setUsuario_id( resultSet.getInt( 3 ) );
+                notificacion.setTipo_notificacion_id( resultSet.getInt( 4 ) );
+                notificacions.add( notificacion );
             }
             resultSet.close();
             statement.close();
             closeConnection( );
-            return estados;
+            return notificacions;
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
         return null;
+
     }
 
     @Override
-    public boolean save(Estado estado)
-    {
+    public boolean save(Notificacion notificacion) {
 
         PreparedStatement preparedStatement = null;
-        String query = "INSERT INTO TBL_ESTADO (ESTADO) VALUES (?)";
-        int res = 0;
-
-        try {
-            if (!openConnection()) {
-                System.out.println("Error en Conexión");
-                return false;
-            }
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, estado.getNombre( ) );
-            res = preparedStatement.executeUpdate( );
-            preparedStatement.close();
-            closeConnection();
-            return res == 1;
-
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean update(Estado estado)
-    {
-
-        PreparedStatement preparedStatement = null;
-        String query = "UPDATE TBL_ESTADO SET ESTADO = ?  WHERE ID = ?";
+        String query = "INSERT INTO TBL_NOTIFICACION (FECHA_NOTIFICACION, TBL_USUARIO_ID, TBL_TIPO_NOTIFICACION_ID) VALUES (?, ?, ?)";
         int res = 0;
 
         try {
@@ -109,8 +83,9 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
             }
 
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, estado.getNombre( ) );
-            preparedStatement.setInt(2, estado.getId( ) );
+            preparedStatement.setString(1, notificacion.getFecha( ) );
+            preparedStatement.setInt(2, notificacion.getUsuario_id( ) );
+            preparedStatement.setInt(3, notificacion.getTipo_notificacion_id( ) );
             res = preparedStatement.executeUpdate( );
             preparedStatement.close();
             closeConnection();
@@ -127,10 +102,44 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
     }
 
     @Override
-    public boolean delete(Estado estado) {
+    public boolean update(Notificacion notificacion) {
 
         PreparedStatement preparedStatement = null;
-        String query = "DELETE FROM TBL_ESTADO WHERE ID = ?";
+        String query = "UPDATE TBL_NOTIFICACION SET FECHA_NOTIFICACION = ?, TBL_USUARIO_ID = ?, TBL_TIPO_NOTIFICACION_ID = ? WHERE ID = ?";
+        int res = 0;
+
+        try {
+            if (!openConnection()) {
+                System.out.println("Error en Conexión");
+                return false;
+            }
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, notificacion.getFecha() );
+            preparedStatement.setInt(2, notificacion.getUsuario_id() );
+            preparedStatement.setInt(3, notificacion.getTipo_notificacion_id() );
+            preparedStatement.setInt(4, notificacion.getId() );
+            res = preparedStatement.executeUpdate( );
+            preparedStatement.close();
+            closeConnection();
+            return res == 1;
+
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
+
+
+    }
+
+    @Override
+    public boolean delete(Notificacion notificacion) {
+
+        PreparedStatement preparedStatement = null;
+        String query = "DELETE FROM TBL_NOTIFICACION WHERE ID = ?";
         int res = 0;
 
         try {
@@ -139,8 +148,9 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
                 System.out.println("Error en Conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, estado.getId( ) );
+            preparedStatement.setInt(1, notificacion.getId( ) );
             res = preparedStatement.executeUpdate( );
             preparedStatement.close();
             closeConnection();
@@ -156,12 +166,12 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
     }
 
     @Override
-    public Estado findById(Integer id) {
+    public Notificacion findById(Integer id) {
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        Estado estado = null;
-        String query = "SELECT * FROM TBL_ESTADO WHERE ID = ?";
+        Notificacion notificacion = null;
+        String query = "SELECT * FROM TBL_NOTIFICACION WHERE ID = ?";
 
         try
         {
@@ -177,30 +187,28 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
 
             if ( resultSet.next() )
             {
-                estado = new Estado();
-                estado.setId( resultSet.getInt( 1 ) );
-                estado.setNombre( resultSet.getString( 2 ) );
-
+                notificacion = new Notificacion();
+                notificacion.setId( resultSet.getInt( 1 ) );
+                notificacion.setFecha( resultSet.getString( 2 ) );
+                notificacion.setUsuario_id( resultSet.getInt(3 ) );
+                notificacion.setTipo_notificacion_id( resultSet.getInt(4 ) );
             }
             resultSet.close();
             preparedStatement.close();
             closeConnection( );
-            return estado;
+            return notificacion;
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
         return null;
-
     }
 
-
-
-/*
+    /*
     public static void main( String a[] )
     {
-        EstadoJdbcImpl
+        NotificacionJdbcImpl
                 .getInstance()
                 .findAll()
                 .stream()
@@ -208,5 +216,6 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
     }
 
 */
+
 
 }

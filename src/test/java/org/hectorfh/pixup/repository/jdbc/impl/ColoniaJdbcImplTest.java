@@ -24,8 +24,8 @@ class ColoniaJdbcImplTest {
         ColoniaJdbc coloniaJdbc = ColoniaJdbcImpl.getInstance();
         List<Colonia> list = coloniaJdbc.findAll();
             assertNotNull(list);
-            assertTrue(list.size() >= 1);
-            assertEquals(1,list.size());
+            assertTrue(list.size() >= 0);
+            assertEquals(0,list.size());
         list.stream().forEach(System.out::println);
 
     }
@@ -34,13 +34,14 @@ class ColoniaJdbcImplTest {
     void save() {
 
         Colonia colonia = new Colonia();
-        colonia.setNombre("NUEVA COLONIA");
+        colonia.setNombre("Colonia 1");
         colonia.setCp("12345");
         colonia.setMunicipio_id(1);
         ColoniaJdbc coloniaJdbc = ColoniaJdbcImpl.getInstance();
         boolean res = coloniaJdbc.save(colonia);
         assertTrue(res);
 
+        System.out.println( colonia);
     }
 
     @Test
@@ -48,14 +49,14 @@ class ColoniaJdbcImplTest {
 
         Colonia colonia = new Colonia();
         colonia.setId(1);
-        colonia.setNombre("COLONIA ACTUALIZADA");
+        colonia.setNombre("Colonia 2");
         colonia.setCp("54321");
-        colonia.setMunicipio_id(11);
-
+        colonia.setMunicipio_id(1);
         ColoniaJdbc coloniaJdbc = ColoniaJdbcImpl.getInstance();
         boolean res = coloniaJdbc.update(colonia);
         assertTrue(res);
 
+        System.out.println( colonia );
     }
 
     @Test

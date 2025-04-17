@@ -13,13 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
+
     private static OrdenJdbc ordenJdbc;
 
     private OrdenJdbcImpl() {
     }
 
     public static OrdenJdbc getInstance() {
-        if (ordenJdbc == null) {
+        if (ordenJdbc == null)
+        {
             ordenJdbc = new OrdenJdbcImpl();
         }
         return ordenJdbc;
@@ -27,6 +29,7 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
 
     @Override
     public List<Orden> findAll() {
+
         Statement statement = null;
         ResultSet resultSet = null;
         List<Orden> ordenes = null;
@@ -34,14 +37,18 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
         String query = "SELECT * FROM TBL_ORDEN";
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return null;
             }
+
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             ordenes = new ArrayList<>();
-            while (resultSet.next()) {
+
+            while (resultSet.next())
+            {
                 orden = new Orden();
                 orden.setId(resultSet.getInt(1));
                 orden.setCostoTotal(resultSet.getFloat(2));
@@ -52,13 +59,18 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
                 orden.setUsuario_id(resultSet.getInt(7));
                 ordenes.add(orden);
             }
+
             resultSet.close();
             statement.close();
             closeConnection();
             return ordenes;
-        } catch (SQLException e) {
+
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
+
         return null;
     }
 
@@ -66,11 +78,12 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
     public boolean save(Orden orden) {
 
         PreparedStatement preparedStatement = null;
-        String query = "INSERT INTO TBL_ORDEN (costo_total, fecha, cantidad_total, estatus_envio, costo_envio, tbl_usuario_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO TBL_ORDEN (COSTO_TOTAL, FECHA, CANTIDAD_TOTAL, ESTATUS_ENVIO, COSTO_ENVIO, TBL_USUARIO_ID) VALUES (?, ?, ?, ?, ?, ?)";
         int res = 0;
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en Conexión");
                 return false;
             }
@@ -89,7 +102,6 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
             return res == 1;
 
         }
-
         catch (SQLException e)
         {
             e.printStackTrace();
@@ -102,14 +114,16 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
     public boolean update(Orden orden) {
 
         PreparedStatement preparedStatement = null;
-        String query = "UPDATE TBL_ORDEN SET costo_total = ?, fecha = ?, cantidad_total = ?, estatus_envio = ?, costo_envio = ?, tbl_usuario_id = ? WHERE id = ?";
+        String query = "UPDATE TBL_ORDEN SET COSTO_TOTAL = ?, FECHA = ?, CANTIDAD_TOTAL = ?, ESTATUS_ENVIO = ?, COSTO_ENVIO = ?, TBL_USUARIO_ID = ? WHERE ID = ?";
         int res = 0;
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en Conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setFloat(1, orden.getCostoTotal());
             preparedStatement.setString(2, orden.getFecha());
@@ -123,7 +137,9 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
             closeConnection();
             return res == 1;
 
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
 
@@ -135,14 +151,16 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
     public boolean delete(Orden orden) {
 
         PreparedStatement preparedStatement = null;
-        String query = "DELETE FROM TBL_ORDEN WHERE id = ?";
+        String query = "DELETE FROM TBL_ORDEN WHERE ID = ?";
         int res = 0;
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en Conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, orden.getId());
             res = preparedStatement.executeUpdate();
@@ -150,7 +168,9 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
             closeConnection();
             return res == 1;
 
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
 
@@ -165,10 +185,11 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Orden orden = null;
-        String query = "SELECT * FROM TBL_ORDEN WHERE id = ?";
+        String query = "SELECT * FROM TBL_ORDEN WHERE ID = ?";
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return null;
             }
@@ -177,7 +198,8 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
+            if (resultSet.next())
+            {
                 orden = new Orden();
                 orden.setId(resultSet.getInt(1));
                 orden.setCostoTotal(resultSet.getFloat(2));
@@ -191,7 +213,10 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
             preparedStatement.close();
             closeConnection();
             return orden;
-        } catch (SQLException e) {
+
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
 
@@ -204,6 +229,7 @@ public class OrdenJdbcImpl extends Conexion<Orden> implements OrdenJdbc {
         OrdenJdbcImpl
                 .getInstance()
                 .findAll()
+                .stream()
                 .forEach(System.out::println);
     }
 

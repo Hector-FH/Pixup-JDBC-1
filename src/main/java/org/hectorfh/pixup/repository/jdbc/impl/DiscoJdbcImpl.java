@@ -34,7 +34,7 @@ public class DiscoJdbcImpl extends Conexion<Disco> implements DiscoJdbc {
         String query = "SELECT * FROM TBL_DISCO";
 
         try {
-            if (openConnection()) {
+            if (!openConnection()) {
                 System.out.println("Error en conexión");
                 return null;
             }
@@ -213,6 +213,7 @@ public class DiscoJdbcImpl extends Conexion<Disco> implements DiscoJdbc {
         DiscoJdbcImpl
                 .getInstance()
                 .findAll()
+                .stream()
                 .forEach(System.out::println);
     }
 

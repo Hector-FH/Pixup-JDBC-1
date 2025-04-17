@@ -4,9 +4,7 @@ public abstract class Catalogo
 {
     protected Integer id;
 
-    public Catalogo()
-    {
-    }
+    public Catalogo() {}
 
     public Integer getId()
     {

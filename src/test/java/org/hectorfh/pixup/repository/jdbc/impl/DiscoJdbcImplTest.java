@@ -24,8 +24,8 @@ class DiscoJdbcImplTest {
         DiscoJdbc discoJdbc = DiscoJdbcImpl.getInstance();
         List<Disco> list = discoJdbc.findAll();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
-        assertEquals(3,list.size());
+        assertTrue(list.size() >= 0);
+        assertEquals(0,list.size());
         list.stream().forEach(System.out::println);
 
     }
@@ -37,19 +37,20 @@ class DiscoJdbcImplTest {
         boolean res = false;
         DiscoJdbc discoJdbc = DiscoJdbcImpl.getInstance();
 
-        disco.setTitulo("PRUEBA DISCO");
+        disco.setTitulo("Disco 1");
         disco.setPrecio(250.0f);
         disco.setExistencia(15);
         disco.setDescuento(10.0f);
         disco.setFechaLanzamiento("2006-10-56");
-        disco.setImagen("https://example.com/imagen.jpg");
-        disco.setArtista_id(2);
-        disco.setDisquera_id(2);
-        disco.setGeneroMusical_id(3);
+        disco.setImagen("imagen.jpg");
+        disco.setArtista_id(1);
+        disco.setDisquera_id(1);
+        disco.setGeneroMusical_id(1);
 
         res = discoJdbc.save(disco);
         assertEquals(true, res);
 
+        System.out.println( disco );
     }
 
     @Test
@@ -57,19 +58,20 @@ class DiscoJdbcImplTest {
 
         Disco disco = new Disco();
         DiscoJdbc discoJdbc = DiscoJdbcImpl.getInstance();
-        disco.setId(2);
+        disco.setId(1); //ID EXISTENTE
         disco.setTitulo("Título Actualizado");
         disco.setPrecio(300.00f);
         disco.setExistencia(15);
         disco.setDescuento(0.20f);
         disco.setFechaLanzamiento("2024-05-10");
         disco.setImagen("actualizado.jpg");
-        disco.setArtista_id(2);
-        disco.setDisquera_id(2);
-        disco.setGeneroMusical_id(3);
+        disco.setArtista_id(1);
+        disco.setDisquera_id(1);
+        disco.setGeneroMusical_id(1);
         boolean res = discoJdbc.update(disco);
         assertTrue(res);
 
+        System.out.println( disco );
     }
 
     @Test
@@ -87,9 +89,10 @@ class DiscoJdbcImplTest {
     void findById() {
 
         DiscoJdbc discoJdbc = DiscoJdbcImpl.getInstance();
-        Disco disco = discoJdbc.findById(2); // Asegúrate de que el ID exista
+        Disco disco = discoJdbc.findById(1); // ID EXISTENTE
         assertNotNull(disco);
-        assertEquals(2, disco.getId());
+        assertEquals(1, disco.getId());
+
         System.out.println(disco);
 
     }

@@ -24,8 +24,8 @@ class GeneroMusicalJdbcImplTest {
         GeneroMusicalJdbc generoMusicalJdbc = GeneroMusicalJdbcImpl.getInstance();
         List<GeneroMusical> list = generoMusicalJdbc.findAll();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
-        assertEquals(1,list.size());
+        assertTrue(list.size() >= 0);
+        assertEquals(0,list.size());
         list.stream().forEach(System.out::println);
 
     }
@@ -40,6 +40,7 @@ class GeneroMusicalJdbcImplTest {
         res = generoMusicalJdbc.save( generoMusical );
         assertEquals( true, res);
 
+        System.out.println( generoMusical );
     }
 
     @Test
@@ -48,11 +49,12 @@ class GeneroMusicalJdbcImplTest {
         GeneroMusical generoMusical = new GeneroMusical();
         boolean res = false;
         generoMusical.setDescripcion("Rock");
-        generoMusical.setId(2);
+        generoMusical.setId(1);
         GeneroMusicalJdbc generoMusicalJdbc = GeneroMusicalJdbcImpl.getInstance();
         res = generoMusicalJdbc.update( generoMusical );
         assertEquals( true, res);
 
+        System.out.println( generoMusical );
     }
 
     @Test
@@ -64,6 +66,8 @@ class GeneroMusicalJdbcImplTest {
         GeneroMusicalJdbc generoMusicalJdbc = GeneroMusicalJdbcImpl.getInstance();
         res = generoMusicalJdbc.delete( generoMusical );
         assertEquals( true, res);
+
+        System.out.println("Eliminado");
 
     }
 

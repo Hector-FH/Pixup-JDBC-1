@@ -4,8 +4,7 @@ public class Estado extends Catalogo
 {
     private String nombre;
 
-    public Estado()
-    {}
+    public Estado() {}
 
     public String getNombre()
     {

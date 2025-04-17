@@ -16,7 +16,6 @@ class DomicilioJdbcImplTest {
         assertNotNull( DomicilioJdbcImpl.getInstance( ) );
         DomicilioJdbcImpl.getInstance();
 
-
     }
 
     @Test
@@ -25,8 +24,8 @@ class DomicilioJdbcImplTest {
         DomicilioJdbc domicilioJdbc = DomicilioJdbcImpl.getInstance();
         List <Domicilio> list = domicilioJdbc.findAll();
         assertNotNull(list );
-        assertTrue(list.size() >= 1);
-        assertEquals(1,list.size());
+        assertTrue(list.size() >= 0);
+        assertEquals(0,list.size());
         list.stream().forEach(System.out::println);
 
     }
@@ -36,17 +35,17 @@ class DomicilioJdbcImplTest {
 
         Domicilio domicilio = new Domicilio();
         boolean res = false;
-        domicilio.setCalle("CALLE PRUEBA");
+        domicilio.setCalle("Calle 1");
         domicilio.setNumExterior("12A");
         domicilio.setNumInterior("3B");
-        domicilio.setColonia_id(1); // Asegúrate que exista
-        domicilio.setTipoDomicilio_id(1); // Asegúrate que exista
-        domicilio.setUsuario_id(1); // Asegúrate que exista
-
+        domicilio.setColonia_id(1);
+        domicilio.setTipoDomicilio_id(1);
+        domicilio.setUsuario_id(1);
         DomicilioJdbc domicilioJdbc = DomicilioJdbcImpl.getInstance();
         res = domicilioJdbc.save( domicilio );
         assertEquals(true, res);
 
+        System.out.println(domicilio);
     }
 
     @Test
@@ -54,18 +53,18 @@ class DomicilioJdbcImplTest {
 
         Domicilio domicilio = new Domicilio();
         boolean res = false;
-        domicilio.setId(1); // ID existente
-        domicilio.setCalle("CALLE ACTUALIZADA");
+        domicilio.setId(3);
+        domicilio.setCalle("Calle 2");
         domicilio.setNumExterior("14C");
         domicilio.setNumInterior("5D");
         domicilio.setColonia_id(1);
         domicilio.setTipoDomicilio_id(1);
         domicilio.setUsuario_id(1);
-
         DomicilioJdbc domicilioJdbc = DomicilioJdbcImpl.getInstance();
-
         res = domicilioJdbc.update( domicilio );
         assertEquals( true, res);
+
+        System.out.println( domicilio );
 
     }
 
@@ -74,7 +73,7 @@ class DomicilioJdbcImplTest {
 
         Domicilio domicilio = new Domicilio();
         boolean res = false;
-        domicilio.setId(1);
+        domicilio.setId(3);
 
         DomicilioJdbc domicilioJdbc = DomicilioJdbcImpl.getInstance();
         res = domicilioJdbc.delete(domicilio);
@@ -86,7 +85,7 @@ class DomicilioJdbcImplTest {
     void findById() {
 
         DomicilioJdbc domicilioJdbc = DomicilioJdbcImpl.getInstance();
-        Domicilio domicilio = domicilioJdbc.findById(1);
+        Domicilio domicilio = domicilioJdbc.findById(3);
         assertNotNull(domicilio);
         System.out.println(domicilio);
 

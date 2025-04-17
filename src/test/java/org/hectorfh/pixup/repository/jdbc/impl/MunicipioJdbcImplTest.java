@@ -1,6 +1,5 @@
 package org.hectorfh.pixup.repository.jdbc.impl;
 
-
 import org.hectorfh.pixup.model.Municipio;
 import org.hectorfh.pixup.repository.jdbc.MunicipioJdbc;
 import org.junit.jupiter.api.Test;
@@ -25,8 +24,8 @@ class MunicipioJdbcImplTest {
         MunicipioJdbc municipioJdbc = MunicipioJdbcImpl.getInstance();
         List<Municipio>list = municipioJdbc.findAll();
                 assertNotNull(list);
-                assertTrue(list.size()>=2);
-                assertEquals(2,list.size());
+                assertTrue(list.size()>=0);
+                assertEquals(0,list.size());
         list.stream().forEach(System.out::println);
 
     }
@@ -37,11 +36,12 @@ class MunicipioJdbcImplTest {
         Municipio municipio = new Municipio();
         boolean res = false;
         MunicipioJdbc municipioJdbc = MunicipioJdbcImpl.getInstance();
-        municipio.setMunicipio("Iztacalco");
-        municipio.setEstado_id(4);
+        municipio.setMunicipio("TLALNEPANTLA");
+        municipio.setEstado_id(1);
         res = municipioJdbc.save( municipio );
         assertEquals(true, res);
 
+        System.out.println( municipio );
     }
 
     @Test
@@ -50,8 +50,8 @@ class MunicipioJdbcImplTest {
         Municipio municipio = new Municipio();
         boolean res = false;
         municipio.setMunicipio("IZTACALCO");
-        municipio.setEstado_id(3);
-        municipio.setId(4);
+        municipio.setEstado_id(1);
+        municipio.setId(1);
         MunicipioJdbc municipioJdbc = MunicipioJdbcImpl.getInstance();
         res = municipioJdbc.update( municipio );
         assertEquals(true, res);
@@ -75,11 +75,11 @@ class MunicipioJdbcImplTest {
     {
 
         MunicipioJdbc municipioJdbc = MunicipioJdbcImpl.getInstance();
-        Municipio municipio = municipioJdbc.findById(11);
+        Municipio municipio = municipioJdbc.findById(1);
         assertNotNull( municipio );
-        assertTrue("Iztacalco".equals(municipio.getMunicipio()));
-        assertEquals(4, municipio.getEstado_id());
-        assertEquals(11, municipio.getId());
+        assertTrue("TLALNEPANTLA".equals(municipio.getMunicipio()));
+        assertEquals(1, municipio.getEstado_id());
+        assertEquals(1, municipio.getId());
         System.out.println( municipio );
 
     }

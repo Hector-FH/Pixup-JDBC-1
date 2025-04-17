@@ -1,9 +1,8 @@
 package org.hectorfh.pixup.repository.jdbc.impl;
 
-
-import org.hectorfh.pixup.model.Disquera;
+import org.hectorfh.pixup.model.Cancion;
+import org.hectorfh.pixup.repository.jdbc.CancionJdbc;
 import org.hectorfh.pixup.repository.jdbc.Conexion;
-import org.hectorfh.pixup.repository.jdbc.DisqueraJdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,28 +11,30 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisqueraJdbcImpl extends Conexion<Disquera> implements DisqueraJdbc {
-    private static DisqueraJdbc disqueraJdbc;
+public class CancionJdbcImpl extends Conexion<Cancion> implements CancionJdbc {
 
-    private DisqueraJdbcImpl() {
+
+    private static CancionJdbc cancionJdbc;
+
+    private CancionJdbcImpl() {
     }
 
-    public static DisqueraJdbc getInstance() {
-        if (disqueraJdbc == null)
-        {
-            disqueraJdbc = new DisqueraJdbcImpl();
+    public static CancionJdbc getInstance()
+    {
+        if (cancionJdbc == null) {
+            cancionJdbc = new CancionJdbcImpl();
         }
-        return disqueraJdbc;
+        return cancionJdbc;
     }
 
     @Override
-    public List<Disquera> findAll() {
+    public List<Cancion> findAll() {
 
         Statement statement = null;
         ResultSet resultSet = null;
-        List<Disquera> disqueras = null;
-        Disquera disquera = null;
-        String query = "SELECT * FROM TBL_DISQUERA";
+        List<Cancion> cancions = null;
+        Cancion cancion = null;
+        String query = "SELECT * FROM TBL_CANCION";
 
         try {
             if (!openConnection())
@@ -44,18 +45,21 @@ public class DisqueraJdbcImpl extends Conexion<Disquera> implements DisqueraJdbc
 
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
-            disqueras = new ArrayList<>();
+            cancions = new ArrayList<>();
+
             while (resultSet.next())
             {
-                disquera = new Disquera();
-                disquera.setId(resultSet.getInt(1));
-                disquera.setNombre(resultSet.getString(2));
-                disqueras.add(disquera);
+                cancion = new Cancion();
+                cancion.setId(resultSet.getInt(1));
+                cancion.setTitulo(resultSet.getString(2));
+                cancion.setDuracion(resultSet.getString(3));
+                cancion.setDisco_id(resultSet.getInt(4));
+                cancions.add(cancion);
             }
             resultSet.close();
             statement.close();
             closeConnection();
-            return disqueras;
+            return cancions;
 
         }
         catch (SQLException e)
@@ -67,10 +71,10 @@ public class DisqueraJdbcImpl extends Conexion<Disquera> implements DisqueraJdbc
     }
 
     @Override
-    public boolean save(Disquera disquera) {
+    public boolean save(Cancion cancion) {
 
         PreparedStatement preparedStatement = null;
-        String query = "INSERT INTO TBL_DISQUERA (NOMBRE) VALUES (?)";
+        String query = "INSERT INTO TBL_CANCION (TITULO, DURACION, TBL_DISCO_ID) VALUES (?, ?, ?)";
         int res = 0;
 
         try {
@@ -81,7 +85,9 @@ public class DisqueraJdbcImpl extends Conexion<Disquera> implements DisqueraJdbc
             }
 
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, disquera.getNombre());
+            preparedStatement.setString(1, cancion.getTitulo());
+            preparedStatement.setString(2, cancion.getDuracion());
+            preparedStatement.setInt(3, cancion.getDisco_id());
             res = preparedStatement.executeUpdate();
             preparedStatement.close();
             closeConnection();
@@ -97,10 +103,10 @@ public class DisqueraJdbcImpl extends Conexion<Disquera> implements DisqueraJdbc
     }
 
     @Override
-    public boolean update(Disquera disquera) {
+    public boolean update(Cancion cancion) {
 
         PreparedStatement preparedStatement = null;
-        String query = "UPDATE TBL_DISQUERA SET NOMBRE = ? WHERE ID = ?";
+        String query = "UPDATE TBL_CANCION SET TITULO = ?, DURACION = ?, TBL_DISCO_ID = ? WHERE ID = ?";
         int res = 0;
 
         try {
@@ -111,8 +117,10 @@ public class DisqueraJdbcImpl extends Conexion<Disquera> implements DisqueraJdbc
             }
 
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, disquera.getNombre());
-            preparedStatement.setInt(2, disquera.getId());
+            preparedStatement.setString(1, cancion.getTitulo());
+            preparedStatement.setString(2, cancion.getDuracion());
+            preparedStatement.setInt(3, cancion.getDisco_id());
+            preparedStatement.setInt(4, cancion.getId());
             res = preparedStatement.executeUpdate();
             preparedStatement.close();
             closeConnection();
@@ -128,10 +136,10 @@ public class DisqueraJdbcImpl extends Conexion<Disquera> implements DisqueraJdbc
     }
 
     @Override
-    public boolean delete(Disquera disquera) {
+    public boolean delete(Cancion cancion) {
 
         PreparedStatement preparedStatement = null;
-        String query = "DELETE FROM TBL_DISQUERA WHERE ID = ?";
+        String query = "DELETE FROM TBL_CANCION WHERE ID = ?";
         int res = 0;
 
         try {
@@ -142,7 +150,7 @@ public class DisqueraJdbcImpl extends Conexion<Disquera> implements DisqueraJdbc
             }
 
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, disquera.getId());
+            preparedStatement.setInt(1, cancion.getId());
             res = preparedStatement.executeUpdate();
             preparedStatement.close();
             closeConnection();
@@ -158,11 +166,12 @@ public class DisqueraJdbcImpl extends Conexion<Disquera> implements DisqueraJdbc
     }
 
     @Override
-    public Disquera findById(Integer id) {
+    public Cancion findById(Integer id) {
+
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        Disquera disquera = null;
-        String query = "SELECT * FROM TBL_DISQUERA WHERE ID = ?";
+        Cancion cancion = null;
+        String query = "SELECT * FROM TBL_CANCION WHERE ID = ?";
 
         try {
             if (!openConnection())
@@ -177,14 +186,17 @@ public class DisqueraJdbcImpl extends Conexion<Disquera> implements DisqueraJdbc
 
             if (resultSet.next())
             {
-                disquera = new Disquera();
-                disquera.setId(resultSet.getInt(1));
-                disquera.setNombre(resultSet.getString(2));
+                cancion = new Cancion();
+                cancion.setId(resultSet.getInt(1));
+                cancion.setTitulo(resultSet.getString(2));
+                cancion.setDuracion(resultSet.getString(3));
+                cancion.setDisco_id(resultSet.getInt(4));
             }
             resultSet.close();
             preparedStatement.close();
             closeConnection();
-            return disquera;
+            return cancion;
+
         }
         catch (SQLException e)
         {
@@ -196,14 +208,15 @@ public class DisqueraJdbcImpl extends Conexion<Disquera> implements DisqueraJdbc
 
 
 
-/*
+    /*
     public static void main(String[] a) {
-        DisqueraJdbcImpl
+        CancionJdbcImpl
                 .getInstance()
                 .findAll()
                 .stream()
                 .forEach(System.out::println);
     }
 
- */
+     */
+
 }

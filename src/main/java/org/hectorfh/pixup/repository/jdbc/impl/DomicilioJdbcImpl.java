@@ -12,13 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DomicilioJdbcImpl extends Conexion<Domicilio> implements DomicilioJdbc {
+
     private static DomicilioJdbc domicilioJdbc;
 
-    private DomicilioJdbcImpl() {
-    }
+    private DomicilioJdbcImpl() {}
 
     public static DomicilioJdbc getInstance() {
-        if (domicilioJdbc == null) {
+        if (domicilioJdbc == null)
+        {
             domicilioJdbc = new DomicilioJdbcImpl();
         }
         return domicilioJdbc;
@@ -33,14 +34,17 @@ public class DomicilioJdbcImpl extends Conexion<Domicilio> implements DomicilioJ
         String query = "SELECT * FROM TBL_DOMICILIO";
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return null;
             }
+
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             domicilios = new ArrayList<>();
-            while (resultSet.next()) {
+            while (resultSet.next())
+            {
                 domicilio = new Domicilio();
                 domicilio.setId(resultSet.getInt(1));
                 domicilio.setCalle(resultSet.getString(2));
@@ -55,9 +59,12 @@ public class DomicilioJdbcImpl extends Conexion<Domicilio> implements DomicilioJ
             statement.close();
             closeConnection();
             return domicilios;
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
+
         return null;
     }
 
@@ -66,11 +73,15 @@ public class DomicilioJdbcImpl extends Conexion<Domicilio> implements DomicilioJ
 
         PreparedStatement preparedStatement = null;
         String query = "INSERT INTO TBL_DOMICILIO (CALLE, NUM_EXTERIOR, NUM_INTERIOR, TBL_COLONIA_ID, TBL_TIPO_DOMICILIO_ID, TBL_USUARIO_ID) VALUES (?, ?, ?, ?, ?, ?)";
+        int res = 0;
+
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, domicilio.getCalle());
             preparedStatement.setString(2, domicilio.getNumExterior());
@@ -78,13 +89,17 @@ public class DomicilioJdbcImpl extends Conexion<Domicilio> implements DomicilioJ
             preparedStatement.setInt(4, domicilio.getColonia_id());
             preparedStatement.setInt(5, domicilio.getTipoDomicilio_id());
             preparedStatement.setInt(6, domicilio.getUsuario_id());
-            int resultado = preparedStatement.executeUpdate();
+            res = preparedStatement.executeUpdate();
             preparedStatement.close();
             closeConnection();
-            return resultado == 1;
-        } catch (SQLException e) {
+            return res == 1;
+
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
+
         return false;
 
     }
@@ -94,11 +109,15 @@ public class DomicilioJdbcImpl extends Conexion<Domicilio> implements DomicilioJ
 
         PreparedStatement preparedStatement = null;
         String query = "UPDATE TBL_DOMICILIO SET CALLE = ?, NUM_EXTERIOR = ?, NUM_INTERIOR = ?, TBL_COLONIA_ID = ?, TBL_TIPO_DOMICILIO_ID = ?, TBL_USUARIO_ID = ? WHERE ID = ?";
+        int res = 0;
+
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, domicilio.getCalle());
             preparedStatement.setString(2, domicilio.getNumExterior());
@@ -107,13 +126,17 @@ public class DomicilioJdbcImpl extends Conexion<Domicilio> implements DomicilioJ
             preparedStatement.setInt(5, domicilio.getTipoDomicilio_id());
             preparedStatement.setInt(6, domicilio.getUsuario_id());
             preparedStatement.setInt(7, domicilio.getId());
-            int resultado = preparedStatement.executeUpdate();
+            res = preparedStatement.executeUpdate();
             preparedStatement.close();
             closeConnection();
-            return resultado == 1;
-        } catch (SQLException e) {
+            return res == 1;
+
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
+
         return false;
 
     }
@@ -123,22 +146,28 @@ public class DomicilioJdbcImpl extends Conexion<Domicilio> implements DomicilioJ
 
         PreparedStatement preparedStatement = null;
         String query = "DELETE FROM TBL_DOMICILIO WHERE ID = ?";
+        int res = 0;
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, domicilio.getId());
-            int res = preparedStatement.executeUpdate();
+            res = preparedStatement.executeUpdate();
             preparedStatement.close();
             closeConnection();
             return res == 1;
-        } catch (SQLException e) {
+
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        return false;
 
+        return false;
 
     }
 
@@ -148,15 +177,20 @@ public class DomicilioJdbcImpl extends Conexion<Domicilio> implements DomicilioJ
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Domicilio domicilio = null;
+
         String query = "SELECT * FROM TBL_DOMICILIO WHERE ID = ?";
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return null;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
+
+
             if (resultSet.next()) {
                 domicilio = new Domicilio();
                 domicilio.setId(resultSet.getInt(1));
@@ -167,11 +201,15 @@ public class DomicilioJdbcImpl extends Conexion<Domicilio> implements DomicilioJ
                 domicilio.setTipoDomicilio_id(resultSet.getInt(6));
                 domicilio.setUsuario_id(resultSet.getInt(7));
             }
+
             resultSet.close();
             preparedStatement.close();
             closeConnection();
             return domicilio;
-        } catch (SQLException e) {
+
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
         return null;
@@ -182,6 +220,7 @@ public class DomicilioJdbcImpl extends Conexion<Domicilio> implements DomicilioJ
         DomicilioJdbcImpl
                 .getInstance()
                 .findAll()
+                .stream()
                 .forEach(System.out::println);
     }
 

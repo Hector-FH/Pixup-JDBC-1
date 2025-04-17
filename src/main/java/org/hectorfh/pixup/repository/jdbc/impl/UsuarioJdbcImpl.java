@@ -1,6 +1,5 @@
 package org.hectorfh.pixup.repository.jdbc.impl;
 
-
 import org.hectorfh.pixup.model.Usuario;
 import org.hectorfh.pixup.repository.jdbc.Conexion;
 import org.hectorfh.pixup.repository.jdbc.UsuarioJdbc;
@@ -13,12 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioJdbcImpl extends Conexion<Usuario> implements UsuarioJdbc {
+
     private static UsuarioJdbc usuarioJdbc;
 
-    private UsuarioJdbcImpl() {
-    }
+    private UsuarioJdbcImpl() {}
+
     public static UsuarioJdbc getInstance() {
-        if (usuarioJdbc == null) {
+        if (usuarioJdbc == null)
+        {
             usuarioJdbc = new UsuarioJdbcImpl();
         }
         return usuarioJdbc;
@@ -26,6 +27,7 @@ public class UsuarioJdbcImpl extends Conexion<Usuario> implements UsuarioJdbc {
 
     @Override
     public List<Usuario> findAll() {
+
         Statement statement = null;
         ResultSet resultSet = null;
         List<Usuario> usuarios = null;
@@ -33,14 +35,18 @@ public class UsuarioJdbcImpl extends Conexion<Usuario> implements UsuarioJdbc {
         String query = "SELECT * FROM TBL_USUARIO";
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return null;
             }
+
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             usuarios = new ArrayList<>();
-            while (resultSet.next()) {
+
+            while (resultSet.next())
+            {
                 usuario = new Usuario();
                 usuario.setId(resultSet.getInt(1));
                 usuario.setNombre(resultSet.getString(2));
@@ -50,13 +56,18 @@ public class UsuarioJdbcImpl extends Conexion<Usuario> implements UsuarioJdbc {
                 usuario.setEmail(resultSet.getString(6));
                 usuarios.add(usuario);
             }
+
             resultSet.close();
             statement.close();
             closeConnection();
             return usuarios;
-        } catch (SQLException e) {
+
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
+
         return null;
     }
 
@@ -65,11 +76,12 @@ public class UsuarioJdbcImpl extends Conexion<Usuario> implements UsuarioJdbc {
     public boolean save(Usuario usuario) {
 
         PreparedStatement preparedStatement = null;
-        String query = "INSERT INTO TBL_USUARIO (id, nombre, primer_apellido, segundo_apellido, password, email) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO TBL_USUARIO (ID, NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO, PASSWORD, EMAIL) VALUES (?, ?, ?, ?, ?, ?)";
         int resultado = 0;
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return false;
             }
@@ -81,14 +93,14 @@ public class UsuarioJdbcImpl extends Conexion<Usuario> implements UsuarioJdbc {
             preparedStatement.setString(4, usuario.getSegundoApellido());
             preparedStatement.setString(5, usuario.getPassword());
             preparedStatement.setString(6, usuario.getEmail());
-
             resultado = preparedStatement.executeUpdate();
-
             preparedStatement.close();
             closeConnection();
 
             return resultado == 1;
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
 
@@ -99,14 +111,16 @@ public class UsuarioJdbcImpl extends Conexion<Usuario> implements UsuarioJdbc {
     @Override
     public boolean update(Usuario usuario) {
         PreparedStatement preparedStatement = null;
-        String query = "UPDATE TBL_USUARIO SET nombre = ?, primer_apellido = ?, segundo_apellido = ?, password = ?, email = ? WHERE id = ?";
+        String query = "UPDATE TBL_USUARIO SET NOMBRE = ?, PRIMER_APELLIDO = ?, SEGUNDO_APELLIDO = ?, PASSWORD = ?, EMAIL = ? WHERE ID = ?";
         int res = 0;
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en Conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, usuario.getNombre());
             preparedStatement.setString(2, usuario.getPrimerApellido());
@@ -118,7 +132,10 @@ public class UsuarioJdbcImpl extends Conexion<Usuario> implements UsuarioJdbc {
             preparedStatement.close();
             closeConnection();
             return res == 1;
-        } catch (SQLException e) {
+
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
 
@@ -127,22 +144,28 @@ public class UsuarioJdbcImpl extends Conexion<Usuario> implements UsuarioJdbc {
 
     @Override
     public boolean delete(Usuario usuario) {
+
         PreparedStatement preparedStatement = null;
         String query = "DELETE FROM TBL_USUARIO WHERE id = ?";
         int res = 0;
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en Conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, usuario.getId());
             res = preparedStatement.executeUpdate();
             preparedStatement.close();
             closeConnection();
             return res == 1;
-        } catch (SQLException e) {
+
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
 
@@ -154,18 +177,21 @@ public class UsuarioJdbcImpl extends Conexion<Usuario> implements UsuarioJdbc {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Usuario usuario = null;
-        String query = "SELECT * FROM TBL_USUARIO WHERE id = ?";
+        String query = "SELECT * FROM TBL_USUARIO WHERE ID = ?";
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return null;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
+            if (resultSet.next())
+            {
                 usuario = new Usuario();
                 usuario.setId(resultSet.getInt(1));
                 usuario.setNombre(resultSet.getString(2));
@@ -174,24 +200,30 @@ public class UsuarioJdbcImpl extends Conexion<Usuario> implements UsuarioJdbc {
                 usuario.setPassword(resultSet.getString(5));
                 usuario.setEmail(resultSet.getString(6));
             }
+
             resultSet.close();
             preparedStatement.close();
             closeConnection();
             return usuario;
-        } catch (SQLException e) {
+
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
+
         return null;
     }
 
 
-    /*
+/*
     public static void main(String[] a) {
         UsuarioJdbcImpl
                 .getInstance()
                 .findAll()
+                .stream()
                 .forEach(System.out::println);
     }
+*/
 
-     */
 }

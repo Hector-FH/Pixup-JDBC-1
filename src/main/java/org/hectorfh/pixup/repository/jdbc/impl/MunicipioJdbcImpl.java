@@ -62,7 +62,7 @@ public class MunicipioJdbcImpl extends Conexion<Municipio> implements MunicipioJ
     public boolean save(Municipio municipio) {
 
         PreparedStatement preparedStatement = null; //Inicializa la variable prepareStatement como nula
-        String query ="insert into tbl_municipio (municipio, tbl_estado_id) values (? , ?)"; //Declarar la variable consulta (query) que indica insertar en la tabla_municipio
+        String query ="INSERT INTO TBL_MUNICIPIO (MUNICIPIO, TBL_ESTADO_ID) VALUES (? , ?)"; //Declarar la variable consulta (query) que indica insertar en la tabla_municipio
         int res = 0;
 
         try
@@ -72,6 +72,7 @@ public class MunicipioJdbcImpl extends Conexion<Municipio> implements MunicipioJ
                 System.out.println("Error en Conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement( query );
             preparedStatement.setString(1, municipio.getMunicipio());
             preparedStatement.setInt(2, municipio.getEstado_id());
@@ -94,7 +95,7 @@ public class MunicipioJdbcImpl extends Conexion<Municipio> implements MunicipioJ
     public boolean update(Municipio municipio) {
 
         PreparedStatement preparedStatement = null;
-        String query = "update tbl_municipio set municipio = ?, tbl_estado_id = ? where id = ?";
+        String query = "UPDATE TBL_MUNICIPIO SET MUNICIPIO = ?, TBL_ESTADO_ID = ? WHERE ID = ?";
         int res = 0;
 
         try
@@ -104,6 +105,7 @@ public class MunicipioJdbcImpl extends Conexion<Municipio> implements MunicipioJ
                 System.out.println("Error en conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, municipio.getMunicipio() );
             preparedStatement.setInt(2, municipio.getEstado_id() );
@@ -125,14 +127,16 @@ public class MunicipioJdbcImpl extends Conexion<Municipio> implements MunicipioJ
     public boolean delete(Municipio municipio) {
 
         PreparedStatement preparedStatement = null;
-        String query = "delete from tbl_municipio where id = ?";
+        String query = "DELETE FROM TBL_MUNICIPIO WHERE ID = ?";
         int res = 0;
+
         try {
             if (!openConnection())
             {
                 System.out.println("Error en conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement( query );
             preparedStatement.setInt(1, municipio.getId());
             res = preparedStatement.executeUpdate();
@@ -154,7 +158,7 @@ public class MunicipioJdbcImpl extends Conexion<Municipio> implements MunicipioJ
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Municipio municipio = null;
-        String query = "select * from tbl_municipio where id = ?";
+        String query = "SELECT * FROM TBL_MUNICIPIO WHERE ID = ?";
 
         try
         {
@@ -195,6 +199,7 @@ public class MunicipioJdbcImpl extends Conexion<Municipio> implements MunicipioJ
         MunicipioJdbcImpl
                 .getInstance()
                 .findAll()
+                .stream()
                 .forEach(System.out::println);
     }
 

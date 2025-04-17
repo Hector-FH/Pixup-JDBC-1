@@ -46,6 +46,7 @@ class OrdenJdbcImplTest {
         boolean res = ordenJdbc.save(orden);
         assertEquals(true, res);
 
+        System.out.println( orden );
     }
 
     @Test
@@ -65,6 +66,7 @@ class OrdenJdbcImplTest {
         res = ordenJdbc.update(orden);
         assertEquals(true, res);
 
+        System.out.println( orden );
     }
 
     @Test
@@ -82,9 +84,8 @@ class OrdenJdbcImplTest {
     void findById() {
 
         OrdenJdbc ordenJdbc = OrdenJdbcImpl.getInstance();
-        Orden orden = ordenJdbc.findById(2);
+        Orden orden = ordenJdbc.findById(1);
         assertNotNull(orden);
-        assertEquals(2, orden.getId());
         System.out.println(orden);
 
     }

@@ -16,8 +16,10 @@ public class ArtistaJdbcImpl extends Conexion<Artista> implements ArtistaJdbc {
 
     private ArtistaJdbcImpl() {
     }
+
     public static ArtistaJdbc getInstance() {
-        if (artistaJdbc == null) {
+        if (artistaJdbc == null)
+        {
             artistaJdbc = new ArtistaJdbcImpl();
         }
         return artistaJdbc;
@@ -25,6 +27,7 @@ public class ArtistaJdbcImpl extends Conexion<Artista> implements ArtistaJdbc {
 
     @Override
     public List<Artista> findAll() {
+
         Statement statement = null;
         ResultSet resultSet = null;
         List<Artista> artistas = null;
@@ -32,65 +35,81 @@ public class ArtistaJdbcImpl extends Conexion<Artista> implements ArtistaJdbc {
         String query = "SELECT * FROM TBL_ARTISTA";
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return null;
             }
+
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             artistas = new ArrayList<>();
-            while (resultSet.next()) {
+            while (resultSet.next())
+            {
                 artista = new Artista();
                 artista.setId(resultSet.getInt(1));
                 artista.setNombre(resultSet.getString(2));
                 artistas.add(artista);
             }
+
             resultSet.close();
             statement.close();
             closeConnection();
             return artistas;
-        } catch (SQLException e) {
+        }
+
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
+
         return null;
     }
 
     @Override
     public boolean save(Artista artista) {
+
         PreparedStatement preparedStatement = null;
         String query = "INSERT INTO TBL_ARTISTA (NOMBRE) VALUES (?)";
         int res = 0;
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, artista.getNombre());
             res = preparedStatement.executeUpdate();
             preparedStatement.close();
             closeConnection();
             return res == 1;
+
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
+
         return false;
     }
 
     @Override
     public boolean update(Artista artista) {
+
         PreparedStatement preparedStatement = null;
         String query = "UPDATE TBL_ARTISTA SET NOMBRE = ? WHERE ID = ?";
         int res = 0;
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, artista.getNombre());
             preparedStatement.setInt(2, artista.getId());
@@ -98,11 +117,13 @@ public class ArtistaJdbcImpl extends Conexion<Artista> implements ArtistaJdbc {
             preparedStatement.close();
             closeConnection();
             return res == 1;
+
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
+
         return false;
     }
 
@@ -113,54 +134,65 @@ public class ArtistaJdbcImpl extends Conexion<Artista> implements ArtistaJdbc {
         int res = 0;
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, artista.getId());
             res = preparedStatement.executeUpdate();
             preparedStatement.close();
             closeConnection();
             return res == 1;
+
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
+
         return false;
     }
 
     @Override
     public Artista findById(Integer id) {
+
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Artista artista = null;
         String query = "SELECT * FROM TBL_ARTISTA WHERE ID = ?";
 
         try {
-            if (!openConnection()) {
+            if (!openConnection())
+            {
                 System.out.println("Error en conexión");
                 return null;
             }
+
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
+            if (resultSet.next())
+            {
                 artista = new Artista();
                 artista.setId(resultSet.getInt(1));
                 artista.setNombre(resultSet.getString(2));
-                }
+            }
+
             resultSet.close();
             preparedStatement.close();
             closeConnection();
             return artista;
+
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
+
         return null;
     }
 
@@ -170,8 +202,9 @@ public class ArtistaJdbcImpl extends Conexion<Artista> implements ArtistaJdbc {
         ArtistaJdbcImpl
                 .getInstance()
                 .findAll()
+                .stream()
                 .forEach(System.out::println);
     }
-
  */
+
 }

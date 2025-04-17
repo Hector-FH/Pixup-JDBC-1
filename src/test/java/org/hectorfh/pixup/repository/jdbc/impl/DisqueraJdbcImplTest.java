@@ -37,10 +37,11 @@ class DisqueraJdbcImplTest {
         Disquera disquera = new Disquera();
         boolean res = false;
         DisqueraJdbc disqueraJdbc = DisqueraJdbcImpl.getInstance();
-        disquera.setNombre ("Sony");
+        disquera.setNombre ("SONY");
         res = disqueraJdbc.save( disquera );
         assertEquals( true, res);
 
+        System.out.println( disquera );
     }
 
     @Test
@@ -54,6 +55,7 @@ class DisqueraJdbcImplTest {
         res = disqueraJdbc.update( disquera );
         assertEquals( true, res);
 
+        System.out.println( disquera );
     }
 
     @Test
@@ -66,6 +68,7 @@ class DisqueraJdbcImplTest {
         res = disqueraJdbc.delete( disquera );
         assertEquals( true, res);
 
+        System.out.println("Eliminado");
     }
 
     @Test
@@ -75,6 +78,7 @@ class DisqueraJdbcImplTest {
         Disquera disquera = disqueraJdbc.findById(1);
         assertNotNull( disquera );
         assertEquals(1, disquera.getId());
+
         System.out.println( disquera );
 
     }

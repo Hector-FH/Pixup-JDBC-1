@@ -1,8 +1,9 @@
 package org.hectorfh.pixup.repository.jdbc.impl;
 
 import org.hectorfh.pixup.model.Estado;
+import org.hectorfh.pixup.model.Pago;
 import org.hectorfh.pixup.repository.jdbc.Conexion;
-import org.hectorfh.pixup.repository.jdbc.EstadoJdbc;
+import org.hectorfh.pixup.repository.jdbc.PagoJdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,126 +12,68 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
+public class PagoJdbcImpl extends Conexion<Pago> implements PagoJdbc {
 
-    private static EstadoJdbc estadoJdbc;
+    private static PagoJdbc pagoJdbc;
 
-    private EstadoJdbcImpl() {
-    }
+    public PagoJdbcImpl() {}
 
-    public static EstadoJdbc getInstance( )
+    public static PagoJdbc getInstance()
     {
-        if( estadoJdbc == null )
+        if ( pagoJdbc == null)
         {
-            estadoJdbc = new EstadoJdbcImpl( );
+            pagoJdbc = new PagoJdbcImpl();
         }
-        return estadoJdbc;
+        return pagoJdbc;
     }
 
     @Override
-    public List<Estado> findAll()
-    {
+    public List<Pago> findAll() {
+
         Statement statement = null;
         ResultSet resultSet = null;
-        List<Estado>estados = null;
-        Estado estado = null;
-        String query = "SELECT * FROM TBL_ESTADO";
+        List<Pago> pagos = null;
+        Pago pago = null;
+        String query = "SELECT * FROM TBL_PAGO";
 
-        try
-        {
+        try {
             if( !openConnection() )
             {
                 System.out.println("Error en conexión");
                 return null;
             }
+
             statement = connection.createStatement( );
             resultSet = statement.executeQuery( query );
-            estados = new ArrayList<>( );
+            pagos = new ArrayList<>( );
             while( resultSet.next() )
             {
-                estado = new Estado();
-                estado.setId( resultSet.getInt( 1 ) );
-                estado.setNombre( resultSet.getString( 2 ) );
-                estados.add( estado );
+                pago = new Pago();
+                pago.setId( resultSet.getInt( 1 ) );
+                pago.setNum_tarjeta( resultSet.getString( 2 ) );
+                pago.setFecha( resultSet.getString( 3 ) );
+                pago.setOrden_id( resultSet.getInt( 4 ) );
+                pagos.add( pago );
             }
             resultSet.close();
             statement.close();
             closeConnection( );
-            return estados;
+            return pagos;
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
+
         return null;
-    }
-
-    @Override
-    public boolean save(Estado estado)
-    {
-
-        PreparedStatement preparedStatement = null;
-        String query = "INSERT INTO TBL_ESTADO (ESTADO) VALUES (?)";
-        int res = 0;
-
-        try {
-            if (!openConnection()) {
-                System.out.println("Error en Conexión");
-                return false;
-            }
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, estado.getNombre( ) );
-            res = preparedStatement.executeUpdate( );
-            preparedStatement.close();
-            closeConnection();
-            return res == 1;
-
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean update(Estado estado)
-    {
-
-        PreparedStatement preparedStatement = null;
-        String query = "UPDATE TBL_ESTADO SET ESTADO = ?  WHERE ID = ?";
-        int res = 0;
-
-        try {
-            if (!openConnection()) {
-                System.out.println("Error en Conexión");
-                return false;
-            }
-
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, estado.getNombre( ) );
-            preparedStatement.setInt(2, estado.getId( ) );
-            res = preparedStatement.executeUpdate( );
-            preparedStatement.close();
-            closeConnection();
-            return res == 1;
-
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-        return false;
 
     }
 
     @Override
-    public boolean delete(Estado estado) {
+    public boolean save(Pago pago) {
 
         PreparedStatement preparedStatement = null;
-        String query = "DELETE FROM TBL_ESTADO WHERE ID = ?";
+        String query = "INSERT INTO TBL_PAGO (NUMERO_TARJETA, FECHA, TBL_ORDEN_ID) VALUES (?, ?, ?)";
         int res = 0;
 
         try {
@@ -139,8 +82,11 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
                 System.out.println("Error en Conexión");
                 return false;
             }
+
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, estado.getId( ) );
+            preparedStatement.setString(1, pago.getNum_tarjeta( ) );
+            preparedStatement.setString(2, pago.getFecha( ) );
+            preparedStatement.setInt(3, pago.getOrden_id( ) );
             res = preparedStatement.executeUpdate( );
             preparedStatement.close();
             closeConnection();
@@ -153,18 +99,83 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
         }
 
         return false;
+
     }
 
     @Override
-    public Estado findById(Integer id) {
+    public boolean update(Pago pago) {
+
+        PreparedStatement preparedStatement = null;
+        String query = "UPDATE TBL_PAGO SET NUMERO_TARJETA = ?, FECHA = ?, TBL_ORDEN_ID = ?  WHERE ID = ?";
+        int res = 0;
+
+        try {
+            if (!openConnection())
+            {
+                System.out.println("Error en Conexión");
+                return false;
+            }
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, pago.getNum_tarjeta( ) );
+            preparedStatement.setString(2, pago.getFecha( ) );
+            preparedStatement.setInt(3, pago.getOrden_id( ) );
+            preparedStatement.setInt(4, pago.getId( ) );
+            res = preparedStatement.executeUpdate( );
+            preparedStatement.close();
+            closeConnection();
+            return res == 1;
+
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public boolean delete(Pago pago) {
+
+        PreparedStatement preparedStatement = null;
+        String query = "DELETE FROM TBL_PAGO WHERE ID = ?";
+        int res = 0;
+
+        try {
+            if (!openConnection())
+            {
+                System.out.println("Error en Conexión");
+                return false;
+            }
+
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, pago.getId( ) );
+            res = preparedStatement.executeUpdate( );
+            preparedStatement.close();
+            closeConnection();
+            return res == 1;
+
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public Pago findById(Integer id) {
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        Estado estado = null;
-        String query = "SELECT * FROM TBL_ESTADO WHERE ID = ?";
+        Pago pago = null;
+        String query = "SELECT * FROM TBL_PAGO WHERE ID = ?";
 
-        try
-        {
+        try {
             if( !openConnection() )
             {
                 System.out.println("Error en conexión");
@@ -177,36 +188,36 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc {
 
             if ( resultSet.next() )
             {
-                estado = new Estado();
-                estado.setId( resultSet.getInt( 1 ) );
-                estado.setNombre( resultSet.getString( 2 ) );
-
+                pago = new Pago();
+                pago.setId( resultSet.getInt( 1 ) );
+                pago.setNum_tarjeta( resultSet.getString( 2 ) );
+                pago.setFecha( resultSet.getString(3 ) );
+                pago.setOrden_id( resultSet.getInt(4) );
             }
             resultSet.close();
             preparedStatement.close();
             closeConnection( );
-            return estado;
+            return pago;
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
+
         return null;
 
     }
 
 
-
 /*
     public static void main( String a[] )
     {
-        EstadoJdbcImpl
+        PagoJdbcImpl
                 .getInstance()
                 .findAll()
                 .stream()
                 .forEach( System.out::println);
     }
-
 */
 
 }

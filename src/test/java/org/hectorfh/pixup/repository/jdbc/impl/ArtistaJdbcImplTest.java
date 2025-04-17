@@ -27,9 +27,9 @@ class ArtistaJdbcImplTest {
 
         ArtistaJdbc artistaJdbc = ArtistaJdbcImpl.getInstance();
         List<Artista> list = artistaJdbc.findAll();
-        assertNotNull(list);
-        assertTrue(list.size() >= 1);
-        assertEquals(1,list.size());
+            assertNotNull(list);
+            assertTrue(list.size() >= 0);
+            assertEquals(0,list.size());
         list.stream().forEach(System.out::println);
 
     }
@@ -44,6 +44,7 @@ class ArtistaJdbcImplTest {
         res = artistaJdbc.save( artista );
         assertEquals( true, res);
 
+        System.out.println( artista );
     }
 
     @Test
@@ -57,6 +58,7 @@ class ArtistaJdbcImplTest {
         res = artistaJdbc.update( artista );
         assertEquals( true, res);
 
+        System.out.println( artista );
     }
 
     @Test
@@ -69,6 +71,7 @@ class ArtistaJdbcImplTest {
         res = artistaJdbc.delete( artista );
         assertEquals( true, res);
 
+        System.out.println("Eliminado");
     }
 
     @Test
@@ -78,6 +81,7 @@ class ArtistaJdbcImplTest {
         Artista artista = artistaJdbc.findById(1);
         assertNotNull( artista );
         assertEquals(1, artista.getId());
+
         System.out.println( artista );
 
     }

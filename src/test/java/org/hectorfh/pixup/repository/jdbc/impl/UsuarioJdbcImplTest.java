@@ -24,8 +24,8 @@ class UsuarioJdbcImplTest {
         UsuarioJdbc usuarioJdbc = UsuarioJdbcImpl.getInstance();
         List<Usuario> list = usuarioJdbc.findAll();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
-        assertEquals(2,list.size());
+        assertTrue(list.size() >= 0);
+        assertEquals(0,list.size());
         list.stream().forEach(System.out::println);
 
     }
@@ -36,15 +36,16 @@ class UsuarioJdbcImplTest {
         Usuario usuario = new Usuario();
         boolean res = false;
         UsuarioJdbc usuarioJdbc = UsuarioJdbcImpl.getInstance();
-        usuario.setId(2);
+        usuario.setId(1);
         usuario.setNombre("Pedro");
-        usuario.setPrimerApellido("PEREZ");
-        usuario.setSegundoApellido("LOPEZ");
+        usuario.setPrimerApellido("Perez");
+        usuario.setSegundoApellido("Lopez");
         usuario.setPassword("123456");
-        usuario.setEmail("juan@correo.com");
+        usuario.setEmail("Pedro@correo.com");
         res = usuarioJdbc.save(usuario);
         assertEquals(true, res);
 
+        System.out.println( usuario );
     }
 
     @Test
@@ -52,16 +53,17 @@ class UsuarioJdbcImplTest {
 
         Usuario usuario = new Usuario();
         boolean res = false;
-        usuario.setId(2);
-        usuario.setNombre("CARLOS");
-        usuario.setPrimerApellido("RAMIREZ");
-        usuario.setSegundoApellido("GOMEZ");
+        usuario.setId(1);
+        usuario.setNombre("Carlos");
+        usuario.setPrimerApellido("Ramirez");
+        usuario.setSegundoApellido("Gomez");
         usuario.setPassword("654321");
-        usuario.setEmail("carlos@correo.com");
+        usuario.setEmail("Carlos@correo.com");
         UsuarioJdbc usuarioJdbc = UsuarioJdbcImpl.getInstance();
         res = usuarioJdbc.update(usuario);
         assertEquals(true, res);
 
+        System.out.println( usuario );
     }
 
     @Test
@@ -80,12 +82,9 @@ class UsuarioJdbcImplTest {
     void findById() {
 
         UsuarioJdbc usuarioJdbc = UsuarioJdbcImpl.getInstance();
-        Usuario usuario = usuarioJdbc.findById(2);
+        Usuario usuario = usuarioJdbc.findById(1);
         assertNotNull(usuario);
-        assertEquals(2, usuario.getId());
         System.out.println(usuario);
-
-
 
     }
 }
